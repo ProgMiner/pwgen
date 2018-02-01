@@ -22,7 +22,7 @@
 
 CC = g++
 CFLAGS = -Wall -std=c++14 -g #-O2
-LDFLAGS = -lcrypto -static-libgcc -static-libstdc++
+LDFLAGS = -lcrypto
 
 BUILDPATH = build
 SOURCES = utils/digest.cpp utils/getline.cpp utils/shred.cpp utils/strgen.cpp utils/xor.cpp main.cpp
@@ -33,7 +33,7 @@ OBJECTS = $(SOURCES:%.cpp=$(BUILDPATH)/%.o)
 
 ifeq ($(OS), Windows_NT)
 CFLAGS += -IC:\MinGW\msys\1.0\include
-LDFLAGS += -LC:\MinGW\msys\1.0\lib
+LDFLAGS += -LC:\MinGW\msys\1.0\lib -static-libgcc -static-libstdc++
 endif
 
 .PHONY: all clean
