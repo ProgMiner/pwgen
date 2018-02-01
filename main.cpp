@@ -30,15 +30,10 @@ SOFTWARE. */
 #include "utils/xor.h"
 
 int main(int argc, char ** argv) {
-
     std::cout << "Master passphrase: ";
-
     std::string * masterKey = new std::string(Utils::getLine());
 
-    std::string masterKeyHash = Utils::xorSTLString(
-            Utils::digestRaw("sha256", * masterKey),
-            Utils::digestRaw("md5", * masterKey)
-    );
+    std::string masterKeyHash = Utils::doubleDigest(* masterKey);
 
     if (!Utils::shred(masterKey, sizeof(* masterKey))) {
         std::cerr << "An error occured while removing master passphrase from RAM!\n";
@@ -49,16 +44,17 @@ int main(int argc, char ** argv) {
 
     do {
         std::cout << "Password ID: ";
-
-        std::string passwordId = Utils::digest("sha256", Utils::getLine());
+        std::string passwordId = Utils::doubleDigest(Utils::getLine());
 
         if (std::cin.eof()) {
+            std::cout << '\n';
             break;
         }
 
-        passwordId = Utils::xorSTLString(passwordId, masterKeyHash);
-        passwordId = Utils::digest("sha512", passwordId);
+        passwordId.append(masterKeyHash);
+        passwordId = Utils::doubleDigest(std::move(passwordId));
 
+        passwordId = Utils::xorShorten(std::move(passwordId), 12);
         std::cout << "Password: " << Utils::stringGenerator(passwordId) << '\n';
     } while (true);
 

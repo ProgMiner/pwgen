@@ -85,3 +85,23 @@ std::string Utils::digest(
 ) {
     return Utils::digest(std::string(digestName), std::string(msg));
 }
+
+std::string Utils::doubleDigest(
+        std::string && msg,
+        std::pair <std::string, std::string> && digestNames
+) {
+    std::string _msg(msg);
+    std::string ret(Utils::digest(digestNames.first, _msg));
+    ret.append(Utils::digest(digestNames.second, std::move(_msg)));
+    return ret;
+}
+
+std::string Utils::doubleDigest(
+        const std::string & msg,
+        const std::pair <std::string, std::string> & digestNames
+) {
+    return Utils::doubleDigest(
+            std::string(msg),
+            std::pair <std::string, std::string> (digestNames)
+    );
+}

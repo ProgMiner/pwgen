@@ -26,11 +26,11 @@ SOFTWARE. */
 
 namespace Utils {
 
-    std::string && getLine(
+    std::string getLine(
             std::istream & cin = std::cin,
             std::string && separators = "\n"
     );
-    std::string && getLine(
+    std::string getLine(
             std::istream & cin,
             const std::string & separators
     );

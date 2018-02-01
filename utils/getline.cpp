@@ -22,7 +22,7 @@ SOFTWARE. */
 
 #include "getline.h"
 
-std::string && Utils::getLine(std::istream & cin, std::string && separators) {
+std::string Utils::getLine(std::istream & cin, std::string && separators) {
     std::string ret;
 
     char c;
@@ -33,9 +33,9 @@ std::string && Utils::getLine(std::istream & cin, std::string && separators) {
 
     ret.pop_back();
 
-    return std::move(ret);
+    return ret;
 }
 
-std::string && Utils::getLine(std::istream & cin, const std::string & separators) {
+std::string Utils::getLine(std::istream & cin, const std::string & separators) {
     return Utils::getLine(cin, std::string(separators));
 }
