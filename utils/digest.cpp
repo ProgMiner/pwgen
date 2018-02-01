@@ -79,7 +79,6 @@ std::string Utils::digestFormatted(std::string && digestName, std::string && msg
 
     return ret;
 }
-#endif
 
 std::string Utils::digestFormatted(
         const std::string & digestName,
@@ -87,6 +86,7 @@ std::string Utils::digestFormatted(
 ) {
     return Utils::digestFormatted(std::string(digestName), std::string(msg));
 }
+#endif
 
 std::string Utils::doubleDigest(
         std::string && msg,

@@ -22,7 +22,7 @@
 
 CC = g++
 CFLAGS = -Wall -std=c++14 -g #-O2
-LDFLAGS = -lcrypto
+LDFLAGS =
 
 BUILDPATH = build
 SOURCES = utils/digest.cpp utils/getline.cpp utils/shred.cpp utils/strgen.cpp utils/xor.cpp main.cpp
@@ -31,9 +31,11 @@ TARGET = pwgen
 
 OBJECTS = $(SOURCES:%.cpp=$(BUILDPATH)/%.o)
 
-ifeq ($(OS), Windows_NT)
-CFLAGS += -IC:\MinGW\msys\1.0\include
-LDFLAGS += -LC:\MinGW\msys\1.0\lib -static-libgcc -static-libstdc++
+ifneq ($(OS), Windows_NT)
+LDFLAGS += -lcrypto
+else
+CFLAGS += -IC:\OpenSSL-Win32\include
+LDFLAGS += -LC:\OpenSSL-Win32\lib -llibeay32 -static-libgcc -static-libstdc++
 endif
 
 .PHONY: all clean
@@ -44,7 +46,7 @@ clean:
 ifneq ($(OS), Windows_NT)
 	rm -rf $(BUILDPATH)
 else
-	del /F $(BUILDPATH)
+	del /F /S /Q $(BUILDPATH)
 endif
 
 build: $(BUILDPATH)/$(TARGET)
