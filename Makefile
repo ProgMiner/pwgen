@@ -22,41 +22,45 @@
 
 CC = g++
 CFLAGS = -Wall -std=c++14 -g #-O2
-LDFLAGS = -lcrypto
+LDFLAGS = -lcrypto -static-libgcc -static-libstdc++
 
 BUILDPATH = build
 SOURCES = utils/digest.cpp utils/getline.cpp utils/shred.cpp utils/strgen.cpp utils/xor.cpp main.cpp
-EXECUTABLE = $(BUILDPATH)/pwgen
+HEADERS = utils/digest.h utils/getline.h utils/shred.h utils/strgen.h utils/xor.h main.h
+TARGET = pwgen
 
 OBJECTS = $(SOURCES:%.cpp=$(BUILDPATH)/%.o)
 
-__all: __build
-
-ifneq ($(OS), Windows_NT)
-
-__clean:
-	rm -rf $(BUILDPATH)
-
-else
-
-__clean:
-	del /F $(BUILDPATH)
-
+ifeq ($(OS), Windows_NT)
+CFLAGS += -IC:\MinGW\msys\1.0\include
+LDFLAGS += -LC:\MinGW\msys\1.0\lib
 endif
 
-__run:
-	"$(BUILDPATH)/$(EXECUTABLE)" $(ARGS)
+.PHONY: all clean
 
-__build: $(EXECUTABLE)
+all: build
 
-$(BUILDPATH):
-	mkdir $(BUILDPATH)
+clean:
+ifneq ($(OS), Windows_NT)
+	rm -rf $(BUILDPATH)
+else
+	del /F $(BUILDPATH)
+endif
+
+build: $(BUILDPATH)/$(TARGET)
 
 %.cpp:
 
-$(BUILDPATH)/%.o: %.cpp $(BUILDPATH)
-	mkdir -p `echo '$@' | grep -Eo '^(.*)/'`
+%/:
+ifeq ($(OS), Windows_NT)
+	mkdir $(subst /,\,$@)
+endif
+
+$(BUILDPATH)/%.o: %.cpp $(HEADERS) $(dir $@)
+ifneq ($(OS), Windows_NT)
+	mkdir -p $(dir $@)
+endif
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(EXECUTABLE): $(OBJECTS)
+$(BUILDPATH)/$(TARGET): $(OBJECTS)
 	$(CC) -o $@ $^ $(LDFLAGS)
