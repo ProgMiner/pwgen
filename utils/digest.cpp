@@ -38,7 +38,7 @@ bool Utils::digestLowlevel(const EVP_MD * digestType, const char * msg, size_t m
     return true;
 }
 
-std::string Utils::digestRaw(std::string && digestName, std::string && msg) {
+std::string Utils::digest(std::string && digestName, std::string && msg) {
     OpenSSL_add_all_digests();
 
     static const EVP_MD * digestType;
@@ -58,15 +58,16 @@ std::string Utils::digestRaw(std::string && digestName, std::string && msg) {
     return std::string((char *) hash, (std::string::size_type) hashLen);
 }
 
-std::string Utils::digestRaw(
+std::string Utils::digest(
         const std::string & digestName,
         const std::string & msg
 ) {
-    return Utils::digestRaw(std::string(digestName), std::string(msg));
+    return Utils::digest(std::string(digestName), std::string(msg));
 }
 
-std::string Utils::digest(std::string && digestName, std::string && msg) {
-    std::string hash = Utils::digestRaw(std::move(digestName), std::move(msg));
+#ifndef _WIN32
+std::string Utils::digestFormatted(std::string && digestName, std::string && msg) {
+    std::string hash = Utils::digest(std::move(digestName), std::move(msg));
 
     std::string ret;
     for (auto it = hash.begin(); it != hash.end(); ++it) {
@@ -78,12 +79,13 @@ std::string Utils::digest(std::string && digestName, std::string && msg) {
 
     return ret;
 }
+#endif
 
-std::string Utils::digest(
+std::string Utils::digestFormatted(
         const std::string & digestName,
         const std::string & msg
 ) {
-    return Utils::digest(std::string(digestName), std::string(msg));
+    return Utils::digestFormatted(std::string(digestName), std::string(msg));
 }
 
 std::string Utils::doubleDigest(
