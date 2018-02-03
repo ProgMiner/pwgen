@@ -53,14 +53,11 @@ build: $(BUILDPATH)/$(TARGET)
 
 %.cpp:
 
-%/:
-ifeq ($(OS), Windows_NT)
-	mkdir $(subst /,\,$@)
-endif
-
-$(BUILDPATH)/%.o: %.cpp $(HEADERS) $(dir $@)
+$(BUILDPATH)/%.o: %.cpp $(HEADERS)
 ifneq ($(OS), Windows_NT)
 	mkdir -p $(dir $@)
+else
+	if not exist "$(subst /,\,$(dir $@))" mkdir $(subst /,\,$(dir $@))
 endif
 	$(CC) -c -o $@ $< $(CFLAGS)
 
