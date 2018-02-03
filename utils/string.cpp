@@ -22,7 +22,7 @@ SOFTWARE. */
 
 #include "string.h"
 
-#include <cstdlib>
+#include <cstring>
 #include <cstdio>
 
 std::string Utils::stringGenerator(std::string && source, std::string && availableChars) {
