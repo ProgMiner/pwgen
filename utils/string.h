@@ -20,18 +20,23 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#include "strgen.h"
+#pragma once
 
-#include <cstdlib>
+#include <string>
 
-std::string Utils::stringGenerator(const std::string & source, const std::string & availableChars) {
-    const std::string::size_type charsCount = availableChars.size();
-    std::string ret;
+namespace Utils {
 
-    for (std::string::size_type i = 0; i < source.size(); ++i) {
-        srand(static_cast <unsigned int> (source[i]));
-        ret.push_back(availableChars[rand() % charsCount]);
-    }
+std::string stringGenerator(
+        std::string && source,
+        std::string && availableChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMOPQRSTUVWXYZ0123456789"
+);
 
-    return ret;
-}
+std::string stringGenerator(
+        const std::string & source,
+        const std::string & availableChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMOPQRSTUVWXYZ0123456789"
+);
+
+std::string formatBinaryString(std::string && source, std::string && format = "%02x");
+std::string formatBinaryString(const std::string & source, const std::string & format = "%02x");
+
+};

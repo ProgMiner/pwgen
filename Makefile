@@ -25,8 +25,8 @@ CFLAGS = -Wall -std=c++14 -g #-O2
 LDFLAGS =
 
 BUILDPATH = build
-SOURCES = utils/digest.cpp utils/getline.cpp utils/shred.cpp utils/strgen.cpp utils/xor.cpp main.cpp
-HEADERS = utils/digest.h utils/getline.h utils/shred.h utils/strgen.h utils/xor.h main.h
+SOURCES = utils/digest.cpp utils/getline.cpp utils/shred.cpp utils/string.cpp utils/xor.cpp main.cpp
+HEADERS = utils/digest.h utils/getline.h utils/shred.h utils/string.h utils/xor.h main.h
 TARGET = pwgen
 
 OBJECTS = $(SOURCES:%.cpp=$(BUILDPATH)/%.o)

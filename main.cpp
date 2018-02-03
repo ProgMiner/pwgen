@@ -25,7 +25,7 @@ SOFTWARE. */
 
 #include "utils/digest.h"
 #include "utils/getline.h"
-#include "utils/strgen.h"
+#include "utils/string.h"
 #include "utils/shred.h"
 #include "utils/xor.h"
 
@@ -54,7 +54,7 @@ int main(int argc, char ** argv) {
         passwordId.append(masterKeyHash);
         passwordId = Utils::doubleDigest(std::move(passwordId));
 
-        passwordId = Utils::xorShorten(std::move(passwordId), 12);
+        passwordId = Utils::xorShorten(std::move(passwordId), 24);
         std::cout << "Password: " << Utils::stringGenerator(passwordId) << '\n';
     } while (true);
 
