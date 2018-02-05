@@ -65,29 +65,6 @@ std::string Utils::digest(
     return Utils::digest(std::string(digestName), std::string(msg));
 }
 
-#ifndef _WIN32
-std::string Utils::digestFormatted(std::string && digestName, std::string && msg) {
-    std::string hash = Utils::digest(std::move(digestName), std::move(msg));
-
-    std::string ret;
-    for (auto it = hash.begin(); it != hash.end(); ++it) {
-        static char tmp[3];
-        snprintf(tmp, 3, "%02hhx", * it);
-
-        ret.append(tmp, 2);
-    }
-
-    return ret;
-}
-
-std::string Utils::digestFormatted(
-        const std::string & digestName,
-        const std::string & msg
-) {
-    return Utils::digestFormatted(std::string(digestName), std::string(msg));
-}
-#endif
-
 std::string Utils::doubleDigest(
         std::string && msg,
         std::pair <std::string, std::string> && digestNames

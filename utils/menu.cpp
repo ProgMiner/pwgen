@@ -20,19 +20,21 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#pragma once
+#include "menu.h"
 
-#include <string>
-#include <openssl/evp.h>
+#include <iostream>
 
-namespace Utils {
+int Utils::menu(std::vector <std::string> items, std::string && prePrompt, std::string && postPrompt) {
+    std::cout << prePrompt << '\n';
 
-bool digestLowlevel(const EVP_MD * digestType, const char * msg, size_t msgLen, unsigned char * dst, unsigned int * dstLen);
+    for (auto it = items.begin(); it != items.end(); ++it) {
+        std::cout << * it << '\n';
+    }
 
-std::string digest(std::string && digestName, std::string && msg);
-std::string digest(const std::string & digestName, const std::string & msg);
+    std::cout << postPrompt;
 
-std::string doubleDigest(std::string && msg, std::pair <std::string, std::string> && digestNames = {"sha256", "md5"});
-std::string doubleDigest(const std::string & msg, const std::pair <std::string, std::string> & digestNames = {"sha256", "md5"});
+    int ret;
+    std::cin >> ret;
 
+    return ret;
 }
