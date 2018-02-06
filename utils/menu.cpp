@@ -27,8 +27,8 @@ SOFTWARE. */
 int Utils::menu(std::vector <std::string> items, std::string && prePrompt, std::string && postPrompt) {
     std::cout << prePrompt << '\n';
 
-    for (auto it = items.begin(); it != items.end(); ++it) {
-        std::cout << * it << '\n';
+    for (std::string::size_type i = 0; i < items.size(); ++i) {
+        std::cout << i << ". " << items[i] << '\n';
     }
 
     std::cout << postPrompt;
