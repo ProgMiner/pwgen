@@ -28,7 +28,13 @@ int Utils::menu(std::vector <std::string> items, std::string && prePrompt, std::
     std::cout << prePrompt << '\n';
 
     for (std::string::size_type i = 0; i < items.size(); ++i) {
-        std::cout << i << ". " << items[i] << '\n';
+        if (items[i].empty()) {
+            std::cout << items[i] << '\n';
+            items.erase(i);
+            --i;
+        } else {
+            std::cout << i << ". " << items[i] << '\n';
+        }
     }
 
     std::cout << postPrompt;
