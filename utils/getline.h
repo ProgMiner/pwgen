@@ -27,12 +27,15 @@ SOFTWARE. */
 namespace Utils {
 
     std::string getLine(
-            std::istream & cin = std::cin,
+            std::istream * cin = & std::cin,
             std::string && separators = "\n"
     );
     std::string getLine(
-            std::istream & cin,
+            std::istream * cin,
             const std::string & separators
     );
+
+    std::string getPassword(std::string && separators = "\n");
+    std::string getPassword(const std::string & separators);
 
 }

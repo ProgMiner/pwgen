@@ -22,20 +22,65 @@ SOFTWARE. */
 
 #include "getline.h"
 
-std::string Utils::getLine(std::istream & cin, std::string && separators) {
+#include <stdio.h>
+
+#ifndef __linux
+#include <conio.h>
+#else
+#include <unistd.h>
+#include <termios.h>
+
+int getch() {
+    int ch;
+    struct termios oldt, newt;
+
+    tcgetattr(STDIN_FILENO, &oldt);
+
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO);
+
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+
+    ch = getchar();
+
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+
+    return ch;
+}
+#endif
+
+std::string Utils::getLine(std::istream * cin, std::string && separators) {
     std::string ret;
 
     char c;
     do {
-        c = cin.get();
+        c = cin->get();
         ret.push_back(c);
-    } while (!cin.eof() && separators.find(c) == std::string::npos);
+    } while (!cin->eof() && separators.find(c) == std::string::npos);
 
     ret.pop_back();
 
     return ret;
 }
 
-std::string Utils::getLine(std::istream & cin, const std::string & separators) {
+std::string Utils::getLine(std::istream * cin, const std::string & separators) {
     return Utils::getLine(cin, std::string(separators));
+}
+
+std::string Utils::getPassword(std::string && separators) {
+    std::string ret;
+
+    char c;
+    do {
+        c = getch();
+        ret.push_back(c);
+    } while (c != 4 && separators.find(c) == std::string::npos);
+
+    ret.pop_back();
+
+    return ret;
+}
+
+std::string Utils::getPassword(const std::string & separators) {
+    return Utils::getPassword(std::string(separators));
 }
