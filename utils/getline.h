@@ -28,14 +28,14 @@ namespace Utils {
 
     std::string getLine(
             std::istream * cin = & std::cin,
-            std::string && separators = "\n"
+            std::string && separators = "\n\r"
     );
     std::string getLine(
             std::istream * cin,
             const std::string & separators
     );
 
-    std::string getPassword(std::string && separators = "\n");
+    std::string getPassword(std::string && separators = "\n\r");
     std::string getPassword(const std::string & separators);
 
 }

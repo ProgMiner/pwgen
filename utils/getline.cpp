@@ -73,7 +73,14 @@ std::string Utils::getPassword(std::string && separators) {
     char c;
     do {
         c = getch();
-        ret.push_back(c);
+
+        if (c == 8 || c == 127) {
+            if (!ret.empty()) {
+                ret.pop_back();
+            }
+        } else {
+            ret.push_back(c);
+        }
     } while (c != 4 && separators.find(c) == std::string::npos);
 
     ret.pop_back();

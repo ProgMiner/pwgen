@@ -33,6 +33,8 @@ int main(int argc, char ** argv) {
     std::cout << "Master passphrase: ";
     std::string * masterKey = new std::string(Utils::getPassword());
 
+    std::cout << '\n';
+
     std::string masterKeyHash = Utils::doubleDigest(* masterKey);
 
     if (!Utils::shred(masterKey, sizeof(* masterKey))) {
