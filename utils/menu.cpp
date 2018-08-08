@@ -27,13 +27,12 @@ SOFTWARE. */
 int Utils::menu(std::vector <std::string> items, std::string && prePrompt, std::string && postPrompt) {
     std::cout << prePrompt << '\n';
 
-    for (std::string::size_type i = 0; i < items.size(); ++i) {
+    for (std::vector <std::string> ::size_type i = 0, j = 0; i < items.size(); ++i) {
         if (items[i].empty()) {
-            std::cout << items[i] << '\n';
-            items.erase(i);
-            --i;
+            std::cout << '\n';
         } else {
-            std::cout << i << ". " << items[i] << '\n';
+            std::cout << j << ". " << items[i] << '\n';
+            ++j;
         }
     }
 
