@@ -38,7 +38,7 @@ CFLAGS += -IC:\OpenSSL-Win32\include
 LDFLAGS += -LC:\OpenSSL-Win32\lib -llibeay32 -static-libgcc -static-libstdc++
 endif
 
-.PHONY: all clean
+.PHONY: all build clean
 
 all: build
 

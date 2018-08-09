@@ -26,6 +26,8 @@ SOFTWARE. */
 
 namespace Utils {
 
+    extern char defaultReplacementChar;
+
     std::string getLine(
             std::istream * cin = & std::cin,
             std::string && separators = "\n\r"
@@ -35,7 +37,13 @@ namespace Utils {
             const std::string & separators
     );
 
-    std::string getPassword(std::string && separators = "\n\r");
-    std::string getPassword(const std::string & separators);
+    std::string getPassword(
+            char * replacementChar = & defaultReplacementChar,
+            std::string && separators = "\n\r"
+    );
+    std::string getPassword(
+            char * replacementChar,
+            const std::string & separators
+    );
 
 }
