@@ -31,18 +31,17 @@ SOFTWARE. */
 
 int main(int argc, char ** argv) {
     std::cout << "Master passphrase: ";
-    std::string * masterKey = new std::string(Utils::getPassword());
+    std::string masterKey(Utils::getPassword());
 
     std::cout << '\n';
+    std::string masterKeyHash = Utils::doubleDigest(masterKey);
 
-    std::string masterKeyHash = Utils::doubleDigest(* masterKey);
-
-    if (!Utils::shred(masterKey, sizeof(* masterKey))) {
-        std::cerr << "An error occured while removing master passphrase from RAM!\n";
+    if (!Utils::shred(const_cast <char *> (masterKey.c_str()), masterKey.size())) {
+        std::cerr << "Warning: An error occured while removing master passphrase from RAM!\n";
     }
 
-    std::cout << "Now you can generate someone passwords.\n"
-                 "Send an End-Of-File for quit.\n";
+    std::cout << "Now you can generate some passwords.\n"
+                 "Send an End-Of-File symbol for quit.\n";
 
     do {
         std::cout << "Password ID: ";
