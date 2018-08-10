@@ -22,15 +22,14 @@ SOFTWARE. */
 
 #pragma once
 
-#include <vector>
 #include <string>
+#include <list>
 
 namespace Utils {
 
     int menu(
-            std::vector <std::string> items,
+            std::list <std::string> && items,
             std::string && prePrompt = "Choose from:",
             std::string && postPrompt = "Your choice: "
     );
-
 }

@@ -22,24 +22,77 @@ SOFTWARE. */
 
 #include "menu.h"
 
+#include <exception>
 #include <iostream>
+#include <map>
 
-int Utils::menu(std::vector <std::string> items, std::string && prePrompt, std::string && postPrompt) {
+int Utils::menu(
+        std::list <std::string> && items,
+        std::string && prePrompt,
+        std::string && postPrompt
+) {
     std::cout << prePrompt << '\n';
 
-    for (std::vector <std::string> ::size_type i = 0, j = 0; i < items.size(); ++i) {
-        if (items[i].empty()) {
-            std::cout << '\n';
-        } else {
-            std::cout << j << ". " << items[i] << '\n';
+    std::map <char, int> chars;
+
+    int j = 1;
+    for (const std::string & item: items) {
+        bool andSym = false;
+        std::string result;
+
+        for (std::string::size_type i = 0; i < item.size(); ++i) {
+            if (item[i] == '&') {
+                if (andSym) {
+                    result += '&';
+                }
+
+                andSym = !andSym;
+                continue;
+            }
+
+            if (andSym) {
+                chars.insert({item[i], j});
+#ifdef _WIN32
+                result += '_';
+#else
+                result += "\e[4m";
+#endif
+            }
+
+            result += item[i];
+        }
+
+        if (!item.empty()) {
+            std::cout << j << ". " << result;
+
             ++j;
         }
+
+        std::cout << '\n';
     }
 
-    std::cout << postPrompt;
-
     int ret;
-    std::cin >> ret;
+    do {
+        std::cout << postPrompt;
 
-    return ret;
+        std::string in;
+        std::cin >> in;
+
+        ret = 0;
+        if (in.size() == 1) {
+            auto it = chars.find(in[0]);
+
+            if (it != chars.end()) {
+                ret = it->second;
+            }
+        }
+
+        if (ret == 0) {
+            try {
+                ret = std::stoi(in);
+            } catch (std::exception e) {}
+        }
+    } while (ret <= 0 || ret > items.size());
+
+    return ret - 1;
 }
