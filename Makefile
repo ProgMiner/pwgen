@@ -49,7 +49,7 @@ else
 	del /F /S /Q $(BUILDPATH)
 endif
 
-build: $(BUILDPATH)/$(TARGET)
+build: $(TARGET)
 
 %.cpp:
 
@@ -61,5 +61,5 @@ else
 endif
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(BUILDPATH)/$(TARGET): $(OBJECTS)
+$(TARGET): $(OBJECTS)
 	$(CC) -o $@ $^ $(LDFLAGS)

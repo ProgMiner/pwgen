@@ -29,7 +29,5 @@ bool Utils::shred(void * ptr, size_t size) {
         return false;
     }
 
-    free(ptr);
-
     return true;
 }
