@@ -40,5 +40,5 @@ public:
     bool action(Action action);
 
 protected:
-    //
+    std::string masterKeyHash;
 };

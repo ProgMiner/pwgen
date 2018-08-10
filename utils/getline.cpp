@@ -49,8 +49,6 @@ int getch() {
 }
 #endif
 
-char Utils::defaultReplacementChar = '*';
-
 std::string Utils::getLine(std::istream * cin, std::string && separators) {
     std::string ret;
 
@@ -69,8 +67,9 @@ std::string Utils::getLine(std::istream * cin, const std::string & separators) {
     return Utils::getLine(cin, std::string(separators));
 }
 
-std::string Utils::getPassword(char * replacementChar, std::string && separators) {
-    bool replace = replacementChar != nullptr;
+std::string Utils::getPassword(char replacementChar, std::string && separators) {
+    bool replace = replacementChar != '\0';
+    separators.push_back((char) 4);
     std::string ret;
 
     char c;
@@ -88,17 +87,17 @@ std::string Utils::getPassword(char * replacementChar, std::string && separators
         } else {
             ret.push_back(c);
 
-            if (replace) {
-                std::cout << * replacementChar;
+            if (replace && separators.find(c) == std::string::npos) {
+                std::cout << replacementChar;
             }
         }
-    } while (c != 4 && separators.find(c) == std::string::npos);
+    } while (separators.find(c) == std::string::npos);
 
     ret.pop_back();
 
     return ret;
 }
 
-std::string Utils::getPassword(char * replacementChar, const std::string & separators) {
+std::string Utils::getPassword(char replacementChar, const std::string & separators) {
     return Utils::getPassword(replacementChar, std::string(separators));
 }
