@@ -20,4 +20,36 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
+#pragma once
+
+#include <string>
+#include <list>
+
 #include "Context.h"
+
+class CLI {
+
+public:
+    class Options {
+
+    public:
+        bool menu  = false;
+        bool quite = false;
+        bool help  = false;
+    } options;
+
+    class Parser {
+
+    public:
+        Parser(Options & options): options(options) {}
+
+        void parse(const std::list <std::string> & args);
+
+    protected:
+        Options & options;
+    } parser = Parser(options);
+
+    CLI();
+
+    void run(const std::list <std::string> & args);
+};

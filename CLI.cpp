@@ -20,4 +20,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#include "Context.h"
+#include "CLI.h"
+
+CLI::CLI() {}
+
+void CLI::run(const std::list <std::string> & args) {
+    parser.parse(args);
+}

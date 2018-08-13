@@ -30,14 +30,15 @@ SOFTWARE. */
 class Context {
 
 public:
-    enum Action {
-        QUIT
-    };
+    Context();
 
-    static const std::list <std::string> MENU;
+    Context(const Context & context):
+        masterKeyHash(context.masterKeyHash)
+    {}
 
-    void run();
-    bool action(Action action);
+    Context(Context && context):
+        masterKeyHash(std::move(context.masterKeyHash))
+    {}
 
 protected:
     std::string masterKeyHash;
