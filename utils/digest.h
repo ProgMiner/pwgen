@@ -27,12 +27,22 @@ SOFTWARE. */
 
 namespace Utils {
 
-bool digestLowlevel(const EVP_MD * digestType, const char * msg, size_t msgLen, unsigned char * dst, unsigned int * dstLen);
+    bool digestLowlevel(
+            const EVP_MD * digestType,
+            const char * msg,
+            size_t msgLen,
+            unsigned char * dst,
+            unsigned int * dstLen
+    );
 
-std::string digest(std::string && digestName, std::string && msg);
-std::string digest(const std::string & digestName, const std::string & msg);
+    std::string digest(
+            const std::string & digestName,
+            const std::string & msg
+    );
 
-std::string doubleDigest(std::string && msg, std::pair <std::string, std::string> && digestNames = {"sha256", "md5"});
-std::string doubleDigest(const std::string & msg, const std::pair <std::string, std::string> & digestNames = {"sha256", "md5"});
+    std::string doubleDigest(
+            const std::string & msg,
+            const std::pair <std::string, std::string> & digestNames = {"sha256", "md5"}
+    );
 
 }

@@ -25,16 +25,17 @@ SOFTWARE. */
 namespace Utils {
     
     char * xorCString(const char * a, const char * b, char * dst);
-
     void xorCStringWith(char * a, const char * b);
 
-    std::string xorSTLString(std::string && a, std::string && b);
-    std::string xorSTLString(const std::string & a, const std::string & b);
-
-    void xorSTLStringWith(std::string & a, std::string && b);
+    std::string xorSTLString(
+            const std::string & a,
+            const std::string & b
+    );
     void xorSTLStringWith(std::string & a, const std::string & b);
 
-    std::string xorShorten(std::string && src, std::string::size_type newLength);
-    std::string xorShorten(const std::string & src, std::string::size_type newLength);
+    std::string xorShorten(
+            const std::string & src,
+            std::string::size_type newLength
+    );
 
 }

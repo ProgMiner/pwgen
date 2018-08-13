@@ -24,27 +24,41 @@ SOFTWARE. */
 
 #include <openssl/evp.h>
 
-bool Utils::digestLowlevel(const EVP_MD * digestType, const char * msg, size_t msgLen, unsigned char * dst, unsigned int * dstLen) {
+bool Utils::digestLowlevel(
+        const EVP_MD * digestType,
+        const char * msg,
+        size_t msgLen,
+        unsigned char * dst,
+        unsigned int * dstLen
+) {
     if (digestType == nullptr) {
         return false;
     }
 
     static EVP_MD_CTX * mdContext = EVP_MD_CTX_create();
 
-    if (!EVP_DigestInit_ex(mdContext, digestType, nullptr)) return false;
-    if (!EVP_DigestUpdate(mdContext, msg, msgLen)) return false;
-    if (!EVP_DigestFinal_ex(mdContext, dst, dstLen)) return false;
+    if (
+            !EVP_DigestInit_ex(mdContext, digestType, nullptr) ||
+            !EVP_DigestUpdate(mdContext, msg, msgLen) ||
+            !EVP_DigestFinal_ex(mdContext, dst, dstLen)
+    ) {
+        return false;
+    }
 
     return true;
 }
 
-std::string Utils::digest(std::string && digestName, std::string && msg) {
+std::string Utils::digest(
+        const std::string & digestName,
+        const std::string & msg
+) {
     OpenSSL_add_all_digests();
 
     static const EVP_MD * digestType;
     digestType = EVP_get_digestbyname(digestName.c_str());
 
     if (digestType == nullptr) {
+        // TODO
         throw false;
     }
 
@@ -52,35 +66,19 @@ std::string Utils::digest(std::string && digestName, std::string && msg) {
     static unsigned int hashLen;
 
     if (!Utils::digestLowlevel(digestType, msg.c_str(), msg.size(), hash, & hashLen)) {
+        // TODO
         throw false;
     }
 
     return std::string((char *) hash, (std::string::size_type) hashLen);
 }
 
-std::string Utils::digest(
-        const std::string & digestName,
-        const std::string & msg
-) {
-    return Utils::digest(std::string(digestName), std::string(msg));
-}
-
-std::string Utils::doubleDigest(
-        std::string && msg,
-        std::pair <std::string, std::string> && digestNames
-) {
-    std::string _msg(msg);
-    std::string ret(Utils::digest(digestNames.first, _msg));
-    ret.append(Utils::digest(digestNames.second, std::move(_msg)));
-    return ret;
-}
-
 std::string Utils::doubleDigest(
         const std::string & msg,
         const std::pair <std::string, std::string> & digestNames
 ) {
-    return Utils::doubleDigest(
-            std::string(msg),
-            std::pair <std::string, std::string> (digestNames)
-    );
+    std::string ret(Utils::digest(digestNames.first, msg));
+    ret.append(Utils::digest(digestNames.second, msg));
+
+    return ret;
 }

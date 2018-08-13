@@ -28,8 +28,9 @@ SOFTWARE. */
 namespace Utils {
 
     int menu(
-            std::list <std::string> && items,
-            std::string && prePrompt = "Choose from:",
-            std::string && postPrompt = "Your choice: "
+            const std::list <std::string> & items,
+            const std::string & prePrompt = "Choose from:",
+            const std::string & postPrompt = "Your choice: "
     );
+
 }

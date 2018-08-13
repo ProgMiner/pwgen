@@ -25,7 +25,10 @@ SOFTWARE. */
 #include <cstring>
 #include <cstdio>
 
-std::string Utils::stringGenerator(std::string && source, std::string && availableChars) {
+std::string Utils::stringGenerator(
+        const std::string & source,
+        const std::string & availableChars
+) {
     auto srcLength = source.size() / 2;
     unsigned short src[srcLength];
     memcpy(src, source.c_str(), source.size());
@@ -40,23 +43,18 @@ std::string Utils::stringGenerator(std::string && source, std::string && availab
     return ret;
 }
 
-std::string Utils::stringGenerator(const std::string & source, const std::string & availableChars) {
-    return Utils::stringGenerator(std::string(source), std::string(availableChars));
-}
-
-std::string Utils::formatBinaryString(std::string && source, std::string && format) {
+std::string Utils::formatBinaryString(
+        const std::string & source,
+        const std::string & format
+) {
     std::string ret;
 
-    for (auto it = source.begin(); it != source.end(); ++it) {
+    for (char c: source) {
         static char buf[9];
-        snprintf(buf, 9, format.c_str(), std::char_traits <char> ::to_int_type(* it));
+        snprintf(buf, 9, format.c_str(), std::char_traits <char> ::to_int_type(c));
 
         ret.append(buf);
     }
 
     return ret;
-}
-
-std::string Utils::formatBinaryString(const std::string & source, const std::string & format) {
-    return Utils::formatBinaryString(std::string(source), std::string(format));
 }

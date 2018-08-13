@@ -27,9 +27,9 @@ SOFTWARE. */
 #include <map>
 
 int Utils::menu(
-        std::list <std::string> && items,
-        std::string && prePrompt,
-        std::string && postPrompt
+        const std::list <std::string> & items,
+        const std::string & prePrompt,
+        const std::string & postPrompt
 ) {
     std::cout << prePrompt << '\n';
 
@@ -40,8 +40,8 @@ int Utils::menu(
         bool andSym = false;
         std::string result;
 
-        for (std::string::size_type i = 0; i < item.size(); ++i) {
-            if (item[i] == '&') {
+        for (char c: item) {
+            if (c == '&') {
                 if (andSym) {
                     result += '&';
                 }
@@ -51,7 +51,7 @@ int Utils::menu(
             }
 
             if (andSym) {
-                chars.insert({item[i], j});
+                chars.insert({c, j});
 #ifdef _WIN32
                 result += '_';
 #else
@@ -59,7 +59,7 @@ int Utils::menu(
 #endif
             }
 
-            result += item[i];
+            result += c;
         }
 
         if (!item.empty()) {

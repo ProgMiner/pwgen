@@ -61,7 +61,10 @@ void Utils::xorCStringWith(char * a, const char * b) {
     }
 }
 
-std::string Utils::xorSTLString(std::string && a, std::string && b) {
+std::string Utils::xorSTLString(
+        const std::string & a,
+        const std::string & b
+) {
     char ret[std::max(a.size(), b.size()) + 1];
 
     Utils::xorCString(a.c_str(), b.c_str(), ret);
@@ -69,33 +72,24 @@ std::string Utils::xorSTLString(std::string && a, std::string && b) {
     return std::string(ret);
 }
 
-std::string Utils::xorSTLString(const std::string & a, const std::string & b) {
-    return Utils::xorSTLString(std::string(a), std::string(b));
-}
-
-void Utils::xorSTLStringWith(std::string & a, std::string && b) {
-    std::string::size_type length = a.size();
+void Utils::xorSTLStringWith(std::string & a, const std::string & b) {
+    auto length = a.size();
 
     for (std::string::size_type i = 0; i < length; ++i) {
         a[i] ^= b[i];
     }
 }
 
-void Utils::xorSTLStringWith(std::string & a, const std::string & b) {
-    return Utils::xorSTLStringWith(a, std::string(b));
-}
-
-std::string Utils::xorShorten(std::string && src, std::string::size_type newLength) {
-    std::string::size_type length = src.size();
+std::string Utils::xorShorten(
+        const std::string & src,
+        std::string::size_type newLength
+) {
+    auto length = src.size();
     std::string ret = src.substr(0, newLength);
 
-    for (std::string::size_type offset = newLength; offset < length; offset += newLength) {
+    for (auto offset = newLength; offset < length; offset += newLength) {
         Utils::xorSTLStringWith(ret, src.substr(offset, newLength));
     }
 
     return ret;
-}
-
-std::string Utils::xorShorten(const std::string & src, std::string::size_type newLength) {
-    return Utils::xorShorten(std::string(src), newLength);
 }

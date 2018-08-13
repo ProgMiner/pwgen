@@ -26,17 +26,14 @@ SOFTWARE. */
 
 namespace Utils {
 
-std::string stringGenerator(
-        std::string && source,
-        std::string && availableChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMOPQRSTUVWXYZ0123456789"
-);
+    std::string stringGenerator(
+            const std::string & source,
+            const std::string & availableChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMOPQRSTUVWXYZ0123456789"
+    );
 
-std::string stringGenerator(
-        const std::string & source,
-        const std::string & availableChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMOPQRSTUVWXYZ0123456789"
-);
-
-std::string formatBinaryString(std::string && source, std::string && format = "%02x");
-std::string formatBinaryString(const std::string & source, const std::string & format = "%02x");
+    std::string formatBinaryString(
+            const std::string & source,
+            const std::string & format = "%02x"
+    );
 
 };
