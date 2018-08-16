@@ -35,21 +35,63 @@ public:
     class Options {
 
     public:
-        bool menu  = false;
+        bool menu  = true;
         bool quite = false;
-        bool help  = false;
     } options;
 
     class Parser {
 
     public:
+        bool allowOptions = true;
+
         Parser(Options & options): options(options) {}
 
         void parse(const std::list <std::string> & args);
         void parseArgument(const std::string & arg);
 
     protected:
-        static const std::map <std::string, std::function <bool(const std::string *)> > OPTIONS;
+        class Option {
+
+        public:
+            typedef std::function <void(CLI::Parser *, const std::string *)> actionType;
+
+            std::list <std::string> description;
+            std::string valueName;
+            bool requiresValue;
+
+            actionType action;
+
+            Option(
+                    std::list <std::string> && description,
+                    std::string && valueName,
+                    bool requiresValue,
+                    actionType && action
+            ):
+                description(std::move(description)),
+                valueName(std::move(valueName)),
+                requiresValue(requiresValue),
+                action(std::move(action))
+            {}
+
+            Option(const Option & opt):
+                description(opt.description),
+                valueName(std::move(opt.valueName)),
+                requiresValue(opt.requiresValue),
+                action(opt.action)
+            {}
+            Option(Option && opt):
+                description(std::move(opt.description)),
+                valueName(std::move(opt.valueName)),
+                requiresValue(opt.requiresValue),
+                action(std::move(opt.action))
+            {}
+
+            void operator()(CLI::Parser * parser, const std::string * arg) const {
+                action(parser, arg);
+            }
+        };
+
+        static const std::map <std::string, Option> OPTIONS;
         static const std::map <char, std::string> SHORT_OPTIONS;
 
         std::list <std::string> optionsBuffer;
