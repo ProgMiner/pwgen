@@ -21,12 +21,12 @@
 # SOFTWARE.
 
 CC = g++
-CFLAGS = -Wall -std=c++14 -g #-O2
+CFLAGS = -Wall -std=c++14 -I. -g #-O2
 LDFLAGS =
 
 BUILDPATH = build
-SOURCES = utils/digest.cpp utils/getline.cpp utils/menu.cpp utils/shred.cpp utils/string.cpp utils/xor.cpp CLI.cpp CLI_Parser.cpp Context.cpp main.cpp
-HEADERS = utils/digest.h utils/getline.h utils/menu.cpp utils/shred.h utils/string.h utils/xor.h CLI.h Context.h main.h
+SOURCES = utils/digest.cpp utils/getline.cpp utils/menu.cpp utils/shred.cpp utils/string.cpp utils/xor.cpp CLI/Parser.cpp CLI.cpp Context.cpp main.cpp
+HEADERS = utils/digest.h utils/getline.h utils/menu.cpp utils/shred.h utils/string.h utils/xor.h CLI.h Context.h Exception.h main.h
 TARGET = pwgen
 
 OBJECTS = $(SOURCES:%.cpp=$(BUILDPATH)/%.o)

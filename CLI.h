@@ -22,8 +22,10 @@ SOFTWARE. */
 
 #pragma once
 
+#include <functional>
 #include <string>
 #include <list>
+#include <map>
 
 #include "Context.h"
 
@@ -44,9 +46,17 @@ public:
         Parser(Options & options): options(options) {}
 
         void parse(const std::list <std::string> & args);
+        void parseArgument(const std::string & arg);
 
     protected:
+        static const std::map <std::string, std::function <bool(const std::string *)> > OPTIONS;
+        static const std::map <char, std::string> SHORT_OPTIONS;
+
+        std::list <std::string> optionsBuffer;
+
         Options & options;
+
+        bool clearOptionsBuffer(const std::string * arg = nullptr);
     } parser = Parser(options);
 
     CLI();
