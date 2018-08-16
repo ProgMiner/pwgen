@@ -42,7 +42,44 @@ public:
     class Parser {
 
     public:
+        class Argument {
+
+        public:
+            const std::string name;
+
+            const bool required;
+
+            Argument(std::string && name, bool required = true):
+                name(std::move(name)),
+                required(required)
+            {}
+
+            ~Argument() {
+                delete value;
+            }
+
+            std::string * operator()() {
+                return value;
+            }
+
+            bool operator()(const std::string & value) {
+                if (this->value == nullptr) {
+                    this->value = new std::string(value);
+                    return false;
+                }
+
+                return true;
+            }
+
+        protected:
+            std::string * value = nullptr;
+        };
+
         bool allowOptions = true;
+
+        std::list <Argument> arguments = {
+            Argument("path")
+        };
 
         Parser(Options & options): options(options) {}
 

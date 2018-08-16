@@ -33,7 +33,29 @@ const std::map <std::string, CLI::Parser::Option> CLI::Parser::OPTIONS = {
     })},
     {"--help", CLI::Parser::Option({"Displays help and quit"}, "", false, [](CLI::Parser * parser, const std::string *) {
         std::cout << "Using:\n" <<
-                     "  " << " [<options>]\n\n" <<
+                     "  " << parser->arguments.front()() << " [<options>]";
+
+        bool first = false;
+        for (const Argument & argument: parser->arguments) {
+            if (!first) {
+                first = true;
+                continue;
+            }
+
+            std::cout << ' ';
+
+            if (!argument.required) {
+                std::cout << '[';
+            }
+
+            std::cout << '<' << argument.name << '>';
+
+            if (!argument.required) {
+                std::cout << ']';
+            }
+        }
+
+        std::cout << "\n\n"
                      "Allowed options:\n\n";
 
         static const auto shortOptions = std::move(([&]() -> std::map <std::string, char> && {
