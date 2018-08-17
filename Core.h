@@ -20,4 +20,28 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
+#pragma once
+
 #include "Context.h"
+
+class Core {
+
+public:
+    Core() {}
+
+    Core(Context && ctx):
+        context(std::move(ctx))
+    {}
+
+    Core(const Core & core):
+        context(core.context)
+    {}
+
+    Core(Core && core):
+        context(std::move(core.context))
+    {}
+
+    // TODO
+protected:
+    Context context;
+};

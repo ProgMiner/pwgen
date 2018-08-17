@@ -25,8 +25,6 @@ SOFTWARE. */
 #include <string>
 #include <list>
 
-#include "utils/menu.h"
-
 class Context {
 
 public:

@@ -24,17 +24,11 @@ SOFTWARE. */
 
 #include <iostream>
 
-CLI::CLI() {}
-
-void CLI::run(const std::list <std::string> & args) {
-    parser.parse(args);
-
-    if (options.help) {
-        printHelp();
-        return;
-    }
+void CLI::run() {
+    // TODO Menu with actions
 }
 
+/*
 void CLI::printHelp() {
     std::cout << "Using:\n" <<
                  "  " << * parser.arguments.front() << " [<options>]";
@@ -124,3 +118,4 @@ void CLI::printHelp() {
         std::cout << '\n';
     }
 }
+*/

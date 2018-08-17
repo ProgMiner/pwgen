@@ -22,45 +22,21 @@ SOFTWARE. */
 
 #pragma once
 
-#include <exception>
-#include <string>
+#include <algorithm>
 
-class Exception {
+#include "Core.h"
+
+class UI {
 
 public:
-    Exception(std::string && msg):
-        msg(std::move(msg))
+    UI() {}
+
+    UI(Core && core):
+        core(std::move(core))
     {}
 
-    Exception(std::string && msg, Exception && previous):
-        msg(std::move(msg)), previous(new Exception(std::move(previous)))
-    {}
-
-    Exception(const std::exception & ex):
-        Exception(ex.what())
-    {}
-
-    Exception(const Exception & ex):
-        msg(ex.msg), previous(ex.previous)
-    {}
-    Exception(Exception && ex):
-        msg(std::move(ex.msg)), previous(std::move(ex.previous))
-    {}
-
-    virtual ~Exception() {
-        delete previous;
-    }
-
-    const std::string & getMessage() const {
-        return msg;
-    }
-
-    const Exception * getPrevious() const {
-        return previous;
-    }
+    virtual void run();
 
 protected:
-    std::string msg;
-
-    Exception * previous = nullptr;
+    Core core;
 };

@@ -22,45 +22,10 @@ SOFTWARE. */
 
 #pragma once
 
-#include <exception>
-#include <string>
+#include "UI.h"
 
-class Exception {
+class SimpleUI: public UI {
 
 public:
-    Exception(std::string && msg):
-        msg(std::move(msg))
-    {}
-
-    Exception(std::string && msg, Exception && previous):
-        msg(std::move(msg)), previous(new Exception(std::move(previous)))
-    {}
-
-    Exception(const std::exception & ex):
-        Exception(ex.what())
-    {}
-
-    Exception(const Exception & ex):
-        msg(ex.msg), previous(ex.previous)
-    {}
-    Exception(Exception && ex):
-        msg(std::move(ex.msg)), previous(std::move(ex.previous))
-    {}
-
-    virtual ~Exception() {
-        delete previous;
-    }
-
-    const std::string & getMessage() const {
-        return msg;
-    }
-
-    const Exception * getPrevious() const {
-        return previous;
-    }
-
-protected:
-    std::string msg;
-
-    Exception * previous = nullptr;
+    virtual void run();
 };
