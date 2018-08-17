@@ -29,6 +29,8 @@ SOFTWARE. */
 
 #include "Context.h"
 
+class CLI;
+
 class CLI {
 
 public:
@@ -36,6 +38,7 @@ public:
 
     public:
         bool menu  = true;
+        bool help  = false;
         bool quite = false;
     } options;
 
@@ -46,11 +49,17 @@ public:
 
         public:
             const std::string name;
+            const std::list <std::string> description;
 
             const bool required;
 
-            Argument(std::string && name, bool required = true):
+            Argument(
+                    std::string && name,
+                    std::list <std::string> && description,
+                    bool required = true
+            ):
                 name(std::move(name)),
+                description(std::move(description)),
                 required(required)
             {}
 
@@ -58,27 +67,32 @@ public:
                 delete value;
             }
 
-            std::string * operator()() {
-                return value;
+            std::string operator*() const {
+                return * value;
             }
 
-            bool operator()(const std::string & value) {
+            operator bool() const {
+                return value != nullptr;
+            }
+
+            const std::string & operator=(const std::string & value) {
                 if (this->value == nullptr) {
                     this->value = new std::string(value);
-                    return false;
                 }
 
-                return true;
+                return value;
             }
 
         protected:
             std::string * value = nullptr;
         };
 
+        friend class CLI;
+
         bool allowOptions = true;
 
         std::list <Argument> arguments = {
-            Argument("path")
+            Argument("", {}) // Run path
         };
 
         Parser(Options & options): options(options) {}
@@ -141,4 +155,5 @@ public:
     CLI();
 
     void run(const std::list <std::string> & args);
+    void printHelp();
 };

@@ -23,7 +23,6 @@ SOFTWARE. */
 #include "CLI.h"
 
 #include <stdexcept>
-#include <iostream>
 
 #include "Exception.h"
 
@@ -32,72 +31,7 @@ const std::map <std::string, CLI::Parser::Option> CLI::Parser::OPTIONS = {
         parser->allowOptions = false;
     })},
     {"--help", CLI::Parser::Option({"Displays help and quit"}, "", false, [](CLI::Parser * parser, const std::string *) {
-        std::cout << "Using:\n" <<
-                     "  " << parser->arguments.front()() << " [<options>]";
-
-        bool first = false;
-        for (const Argument & argument: parser->arguments) {
-            if (!first) {
-                first = true;
-                continue;
-            }
-
-            std::cout << ' ';
-
-            if (!argument.required) {
-                std::cout << '[';
-            }
-
-            std::cout << '<' << argument.name << '>';
-
-            if (!argument.required) {
-                std::cout << ']';
-            }
-        }
-
-        std::cout << "\n\n"
-                     "Allowed options:\n\n";
-
-        static const auto shortOptions = std::move(([&]() -> std::map <std::string, char> && {
-            std::map <std::string, char> ret;
-
-            for (const auto & option: SHORT_OPTIONS) {
-                ret.insert({option.second, option.first});
-            }
-
-            return std::move(ret);
-        })());
-
-        for (const auto & option: OPTIONS) {
-            std::cout << "  " << option.first;
-
-            auto it = shortOptions.find(option.first);
-            if (it != shortOptions.end()) {
-                std::cout << " (-" << it->second << ')';
-            }
-
-            if (!option.second.valueName.empty()) {
-                std::cout << ' ';
-
-                if (!option.second.requiresValue) {
-                    std::cout << '[';
-                }
-
-                std::cout << '<' << option.second.valueName << '>';
-
-                if (!option.second.requiresValue) {
-                    std::cout << ']';
-                }
-            }
-
-            std::cout << '\n';
-
-            for (const std::string & line: option.second.description) {
-                std::cout << "    " << line << "\n\n";
-            }
-        }
-
-        exit(0);
+        parser->options.help = true;
     })},
     {"--no-menu", CLI::Parser::Option({"Disables menu", "For no interactive using"}, "", false, [](CLI::Parser * parser, const std::string *) {
         parser->options.menu = false;
@@ -123,6 +57,14 @@ const std::map <char, std::string> CLI::Parser::SHORT_OPTIONS = {
 void CLI::Parser::parse(const std::list <std::string> & args) {
     for (const std::string & arg: args) {
         parseArgument(arg);
+    }
+
+    clearOptionsBuffer();
+
+    for (const auto & arg: arguments) {
+        if (!arg) {
+            throw Exception("Too few arguments");
+        }
     }
 }
 
@@ -165,7 +107,12 @@ void CLI::Parser::parseArgument(const std::string & arg) {
         throw Exception("Undefined option " + arg, e);
     }
 
-    // Arguments
+    static auto argIt = arguments.begin();
+    if (argIt == arguments.end()) {
+        throw Exception("Too much arguments");
+    }
+
+    * (argIt++) = arg;
 }
 
 bool CLI::Parser::clearOptionsBuffer(const std::string * value) {
