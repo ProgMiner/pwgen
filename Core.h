@@ -24,6 +24,8 @@ SOFTWARE. */
 
 #include "Context.h"
 
+#include "utils/SafeString.h"
+
 class Core {
 
 public:
@@ -41,7 +43,15 @@ public:
         context(std::move(core.context))
     {}
 
-    // TODO
+    Utils::SafeString makeMasterKeyHash(Utils::SafeString && key);
+    void setMasterKeyHash(Utils::SafeString && hash);
+    void setMasterKey(Utils::SafeString && key);
+
+    Utils::SafeString generate(Utils::SafeString && id);
+
+    inline const Context & getContext() const {
+        return context;
+    }
 protected:
     Context context;
 };

@@ -20,50 +20,17 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#pragma once
+#include "Arguments.h"
 
-#include <exception>
-#include <string>
-
-class Exception {
-
-public:
-    Exception(std::string && msg):
-        msg(std::move(msg))
-    {}
-
-    Exception(std::string && msg, Exception && previous):
-        msg(std::move(msg)),
-        previous(new Exception(std::move(previous)))
-    {}
-
-    Exception(const std::exception & ex):
-        Exception(ex.what())
-    {}
-
-    Exception(const Exception & ex):
-        msg(ex.msg),
-        previous(ex.previous)
-    {}
-    Exception(Exception && ex):
-        msg(std::move(ex.msg)),
-        previous(std::move(ex.previous))
-    {}
-
-    virtual ~Exception() {
-        delete previous;
-    }
-
-    inline const std::string & getMessage() const {
-        return msg;
-    }
-
-    inline const Exception * getPrevious() const {
-        return previous;
-    }
-
-protected:
-    std::string msg;
-
-    Exception * previous = nullptr;
-};
+Arguments::Arguments():
+    optionsDescription("Options"),
+    argumentsDescription()
+{
+    optionsDescription.add_options()
+        ("help,h", "Produce help message and quit")
+        ("simple-mode,s", "Run in simple mode\n"
+                          "For no interactive using")
+        ("quiet,q", "Be quiet")
+        ("verbose,v", "Be verbose")
+    ;
+}

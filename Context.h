@@ -25,10 +25,14 @@ SOFTWARE. */
 #include <string>
 #include <list>
 
+#include "utils/SafeString.h"
+
+#include "Core.h"
+
 class Context {
 
 public:
-    Context();
+    Context() {}
 
     Context(const Context & context):
         masterKeyHash(context.masterKeyHash)
@@ -39,5 +43,7 @@ public:
     {}
 
 protected:
-    std::string masterKeyHash;
+    Utils::SafeString masterKeyHash;
+
+    friend class Core;
 };

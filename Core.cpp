@@ -20,50 +20,30 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#pragma once
+#include "Core.h"
 
-#include <exception>
-#include <string>
+#include "utils/getline.h"
+#include "utils/digest.h"
+#include "utils/string.h"
+#include "utils/shred.h"
+#include "utils/xor.h"
 
-class Exception {
+Utils::SafeString Core::makeMasterKeyHash(Utils::SafeString && key) {
+    return Utils::doubleDigest(key);
+}
 
-public:
-    Exception(std::string && msg):
-        msg(std::move(msg))
-    {}
+void Core::setMasterKeyHash(Utils::SafeString && hash) {
+    context.masterKeyHash = std::move(hash);
+}
 
-    Exception(std::string && msg, Exception && previous):
-        msg(std::move(msg)),
-        previous(new Exception(std::move(previous)))
-    {}
+void Core::setMasterKey(Utils::SafeString && hash) {
+    context.masterKeyHash = makeMasterKeyHash(std::move(hash));
+}
 
-    Exception(const std::exception & ex):
-        Exception(ex.what())
-    {}
+Utils::SafeString Core::generate(Utils::SafeString && id) {
+    id = Utils::doubleDigest(std::move(id)) + context.masterKeyHash;
+    id = Utils::doubleDigest(std::move(id));
 
-    Exception(const Exception & ex):
-        msg(ex.msg),
-        previous(ex.previous)
-    {}
-    Exception(Exception && ex):
-        msg(std::move(ex.msg)),
-        previous(std::move(ex.previous))
-    {}
-
-    virtual ~Exception() {
-        delete previous;
-    }
-
-    inline const std::string & getMessage() const {
-        return msg;
-    }
-
-    inline const Exception * getPrevious() const {
-        return previous;
-    }
-
-protected:
-    std::string msg;
-
-    Exception * previous = nullptr;
-};
+    id = Utils::xorShorten(std::move(id), 24);
+    return Utils::stringGenerator(id);
+}

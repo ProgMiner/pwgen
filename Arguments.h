@@ -22,48 +22,34 @@ SOFTWARE. */
 
 #pragma once
 
-#include <exception>
-#include <string>
+#include <boost/program_options.hpp>
 
-class Exception {
+namespace program_options = boost::program_options;
+
+class Arguments:
+    public program_options::variables_map
+{
 
 public:
-    Exception(std::string && msg):
-        msg(std::move(msg))
-    {}
+    Arguments();
 
-    Exception(std::string && msg, Exception && previous):
-        msg(std::move(msg)),
-        previous(new Exception(std::move(previous)))
-    {}
+    template <typename charT>
+    Arguments & parse(int argc, charT ** argv);
 
-    Exception(const std::exception & ex):
-        Exception(ex.what())
-    {}
-
-    Exception(const Exception & ex):
-        msg(ex.msg),
-        previous(ex.previous)
-    {}
-    Exception(Exception && ex):
-        msg(std::move(ex.msg)),
-        previous(std::move(ex.previous))
-    {}
-
-    virtual ~Exception() {
-        delete previous;
+    inline const program_options::options_description &
+    getOptionsDescription() const {
+        return optionsDescription;
     }
 
-    inline const std::string & getMessage() const {
-        return msg;
+    inline const program_options::positional_options_description &
+    getArgumentsDescription() const {
+        return argumentsDescription;
     }
 
-    inline const Exception * getPrevious() const {
-        return previous;
-    }
 
 protected:
-    std::string msg;
-
-    Exception * previous = nullptr;
+    program_options::options_description            optionsDescription;
+    program_options::positional_options_description argumentsDescription;
 };
+
+#include "Arguments.cpp.inc"

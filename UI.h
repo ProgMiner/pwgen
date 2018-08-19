@@ -35,7 +35,7 @@ public:
         core(std::move(core))
     {}
 
-    virtual void run();
+    virtual void run() = 0;
 
 protected:
     Core core;

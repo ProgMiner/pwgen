@@ -27,5 +27,5 @@ SOFTWARE. */
 class CLI: public UI {
 
 public:
-    virtual void run();
+    void run() override;
 };

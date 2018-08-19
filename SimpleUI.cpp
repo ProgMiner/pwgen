@@ -24,38 +24,30 @@ SOFTWARE. */
 
 #include <iostream>
 
+#include "utils/getline.h"
+
 void SimpleUI::run() {
     std::cout << "Master passphrase: ";
-    // core.setMasterKey(Utils::getPassword());
-    std::string masterKey(Utils::getPassword());
+    core.setMasterKey(Utils::getPassword());
 
-    std::cout << '\n';
-    std::string masterKeyHash = Utils::doubleDigest(masterKey);
-
-    if (!Utils::shred(const_cast <char *> (masterKey.c_str()), masterKey.size())) {
-        std::cerr << "Warning: An error occured while removing master passphrase from RAM!\n";
-    }
-
-    std::cout << "Now you can generate some passwords.\n"
-                 "Send an End-Of-File symbol for quit.\n";
+    std::cout << "\n"
+                 "Now you can generate some passwords.\n"
+                 "Send an End-Of-File symbol for quit.";
 
     // core.setPasswordLength(12);
     // core.setPasswordAlphabet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
 
     while (true) {
-        std::cout << "Password ID: ";
-        // std::cout << core.generate(Utils::getLine());
-        std::string passwordId = Utils::doubleDigest(Utils::getLine());
+        std::cout << "\nPassword ID: ";
 
+        auto password = core.generate(Utils::getLine());
         if (std::cin.eof()) {
-            std::cout << '\n';
             break;
         }
 
-        passwordId.append(masterKeyHash);
-        passwordId = Utils::doubleDigest(std::move(passwordId));
-
-        passwordId = Utils::xorShorten(std::move(passwordId), 24);
-        std::cout << "Password: " << Utils::stringGenerator(passwordId) << '\n';
+        std::cout << "Password: " << password;
     }
+
+    std::cout << "\n"
+                 "Bye!\n";
 }

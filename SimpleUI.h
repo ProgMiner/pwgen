@@ -27,5 +27,5 @@ SOFTWARE. */
 class SimpleUI: public UI {
 
 public:
-    virtual void run();
+    void run() override;
 };

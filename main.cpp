@@ -21,44 +21,35 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
 #include <iostream>
-#include <string>
 
-#include "utils/digest.h"
-#include "utils/getline.h"
-#include "utils/string.h"
-#include "utils/shred.h"
-#include "utils/xor.h"
+#include "Arguments.h"
+#include "SimpleUI.h"
+#include "CLI.h"
+#include "UI.h"
 
-int main(int argc, char ** argv) {
-    std::cout << "Master passphrase: ";
-    std::string masterKey(Utils::getPassword());
+void printHelp(std::string && path, const Arguments & args) {
+    std::cout << "Using:\n" <<
+                 "  " << path << " [<options>]\n\n";
 
-    std::cout << '\n';
-    std::string masterKeyHash = Utils::doubleDigest(masterKey);
-
-    if (!Utils::shred(const_cast <char *> (masterKey.c_str()), masterKey.size())) {
-        std::cerr << "Warning: An error occured while removing master passphrase from RAM!\n";
-    }
-
-    std::cout << "Now you can generate some passwords.\n"
-                 "Send an End-Of-File symbol for quit.\n";
-
-    do {
-        std::cout << "Password ID: ";
-        std::string passwordId = Utils::doubleDigest(Utils::getLine());
-
-        if (std::cin.eof()) {
-            std::cout << '\n';
-            break;
-        }
-
-        passwordId.append(masterKeyHash);
-        passwordId = Utils::doubleDigest(std::move(passwordId));
-
-        passwordId = Utils::xorShorten(std::move(passwordId), 24);
-        std::cout << "Password: " << Utils::stringGenerator(passwordId) << '\n';
-    } while (true);
-
-    return 0;
+    std::cout << args.getOptionsDescription();
 }
 
+int main(int argc, char ** argv) {
+    Arguments args;
+    args.parse(argc, argv);
+
+    UI * ui = nullptr;
+
+    if (args.count("help")) {
+        printHelp(argv[0], args);
+    }
+
+    if (args.count("simple-mode")) {
+        ui = new SimpleUI;
+    } else {
+        ui = new CLI;
+    }
+
+    ui->run();
+    return 0;
+}

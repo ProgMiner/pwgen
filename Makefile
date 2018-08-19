@@ -22,11 +22,36 @@
 
 CC = g++
 CFLAGS = -Wall -std=c++14 -I. -g #-O2
-LDFLAGS =
+LDFLAGS = -lboost_program_options
 
 BUILDPATH = build
-SOURCES = utils/digest.cpp utils/getline.cpp utils/menu.cpp utils/shred.cpp utils/string.cpp utils/xor.cpp CLI/Parser.cpp CLI.cpp Context.cpp main.cpp
-HEADERS = utils/digest.h utils/getline.h utils/menu.cpp utils/shred.h utils/string.h utils/xor.h CLI.h Context.h Exception.h main.h
+SOURCES = main.cpp \
+		  utils/digest.cpp \
+		  utils/string.cpp \
+		  utils/xor.cpp \
+		  utils/getline.cpp \
+		  utils/shred.cpp \
+		  utils/menu.cpp \
+		  Core.cpp \
+		  CLI.cpp \
+		  SimpleUI.cpp \
+		  Arguments.cpp
+HEADERS = main.h \
+		  utils/menu.h \
+		  utils/digest.h \
+		  utils/getline.h \
+		  utils/xor.h \
+		  utils/shred.h \
+		  utils/string.h \
+		  utils/SafeString.h \
+		  SimpleUI.h \
+		  Context.h \
+		  CLI.h \
+		  Exception.h \
+		  UI.h \
+		  Core.h \
+		  Arguments.h \
+		  Arguments.cpp.inc
 TARGET = pwgen
 
 OBJECTS = $(SOURCES:%.cpp=$(BUILDPATH)/%.o)
