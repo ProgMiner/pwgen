@@ -27,5 +27,11 @@ SOFTWARE. */
 class CLI: public UI {
 
 public:
+    CLI(): UI() {}
+
+    CLI(Core && core):
+        UI(std::move(core))
+    {}
+
     void run() override;
 };

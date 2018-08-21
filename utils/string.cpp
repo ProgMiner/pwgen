@@ -29,15 +29,11 @@ std::string Utils::stringGenerator(
         const std::string & source,
         const std::string & availableChars
 ) {
-    auto srcLength = source.size() / 2;
-    unsigned short src[srcLength];
-    memcpy(src, source.c_str(), source.size());
-
     auto availableCharsCount = availableChars.size();
 
     std::string ret;
-    for (std::string::size_type i = 0; i < srcLength; ++i) {
-        ret.push_back(availableChars[src[i] % availableCharsCount]);
+    for (std::string::size_type i = 0; i < source.size(); ++i) {
+        ret.push_back(availableChars[source[i] % availableCharsCount]);
     }
 
     return ret;

@@ -35,15 +35,19 @@ public:
     Context() {}
 
     Context(const Context & context):
-        masterKeyHash(context.masterKeyHash)
+        masterKeyHash(context.masterKeyHash),
+        passwordLength(context.passwordLength)
     {}
 
     Context(Context && context):
-        masterKeyHash(std::move(context.masterKeyHash))
+        masterKeyHash(std::move(context.masterKeyHash)),
+        passwordLength(std::move(context.passwordLength))
     {}
 
 protected:
     Utils::SafeString masterKeyHash;
+
+    Utils::SafeString::size_type passwordLength = 12;
 
     friend class Core;
 };

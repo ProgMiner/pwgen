@@ -38,16 +38,20 @@ int main(int argc, char ** argv) {
     Arguments args;
     args.parse(argc, argv);
 
-    UI * ui = nullptr;
-
-    if (args.count("help")) {
+    if (args.find("help") != args.end()) {
         printHelp(argv[0], args);
+        return 0;
     }
 
-    if (args.count("simple-mode")) {
-        ui = new SimpleUI;
+    UI * ui = nullptr;
+
+    Core core;
+    core.setPasswordLength(args["length"].as <Utils::SafeString::size_type> ());
+
+    if (args.find("simple-mode") != args.end()) {
+        ui = new SimpleUI(std::move(core));
     } else {
-        ui = new CLI;
+        ui = new CLI(std::move(core));
     }
 
     ui->run();

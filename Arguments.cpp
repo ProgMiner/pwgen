@@ -22,14 +22,25 @@ SOFTWARE. */
 
 #include "Arguments.h"
 
+#include <utils/SafeString.h>
+
 Arguments::Arguments():
     optionsDescription("Options"),
     argumentsDescription()
 {
     optionsDescription.add_options()
         ("help,h", "Produce help message and quit")
+
         ("simple-mode,s", "Run in simple mode\n"
                           "For no interactive using")
+
+        (
+            "length,l",
+            program_options::value <Utils::SafeString::size_type> ()->
+                default_value(12),
+            "Set password length"
+        )
+
         ("quiet,q", "Be quiet")
         ("verbose,v", "Be verbose")
     ;

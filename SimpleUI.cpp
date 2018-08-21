@@ -34,7 +34,6 @@ void SimpleUI::run() {
                  "Now you can generate some passwords.\n"
                  "Send an End-Of-File symbol for quit.";
 
-    // core.setPasswordLength(12);
     // core.setPasswordAlphabet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
 
     while (true) {

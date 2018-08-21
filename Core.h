@@ -47,6 +47,8 @@ public:
     void setMasterKeyHash(Utils::SafeString && hash);
     void setMasterKey(Utils::SafeString && key);
 
+    void setPasswordLength(Utils::SafeString::size_type length);
+
     Utils::SafeString generate(Utils::SafeString && id);
 
     inline const Context & getContext() const {

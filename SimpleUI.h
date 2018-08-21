@@ -27,5 +27,11 @@ SOFTWARE. */
 class SimpleUI: public UI {
 
 public:
+    SimpleUI(): UI() {}
+
+    SimpleUI(Core && core):
+        UI(std::move(core))
+    {}
+
     void run() override;
 };
