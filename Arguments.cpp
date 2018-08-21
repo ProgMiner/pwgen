@@ -41,7 +41,13 @@ Arguments::Arguments():
             "Set password length"
         )
 
+        (
+            "alphabet,a",
+            program_options::value <std::string> ()->
+                default_value("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"),
+            "Set password alphabet"
+        )
+
         ("quiet,q", "Be quiet")
-        ("verbose,v", "Be verbose")
     ;
 }

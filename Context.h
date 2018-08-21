@@ -36,18 +36,22 @@ public:
 
     Context(const Context & context):
         masterKeyHash(context.masterKeyHash),
-        passwordLength(context.passwordLength)
+        passwordLength(context.passwordLength),
+        passwordAlphabet(context.passwordAlphabet)
     {}
 
     Context(Context && context):
         masterKeyHash(std::move(context.masterKeyHash)),
-        passwordLength(std::move(context.passwordLength))
+        passwordLength(std::move(context.passwordLength)),
+        passwordAlphabet(std::move(context.passwordAlphabet))
     {}
 
 protected:
     Utils::SafeString masterKeyHash;
 
     Utils::SafeString::size_type passwordLength = 12;
+
+    std::string passwordAlphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
     friend class Core;
 };

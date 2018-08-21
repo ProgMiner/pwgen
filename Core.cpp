@@ -45,9 +45,13 @@ Utils::SafeString Core::generate(Utils::SafeString && id) {
     id = Utils::doubleDigest(std::move(id));
 
     id = Utils::xorShorten(std::move(id), context.passwordLength);
-    return Utils::stringGenerator(id);
+    return Utils::stringGenerator(id, context.passwordAlphabet);
 }
 
 void Core::setPasswordLength(Utils::SafeString::size_type length) {
     context.passwordLength = length;
+}
+
+void Core::setPasswordAlphabet(std::string alphabet) {
+    context.passwordAlphabet = alphabet;
 }

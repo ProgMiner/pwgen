@@ -47,6 +47,7 @@ int main(int argc, char ** argv) {
 
     Core core;
     core.setPasswordLength(args["length"].as <Utils::SafeString::size_type> ());
+    core.setPasswordAlphabet(args["alphabet"].as <std::string> ());
 
     if (args.find("simple-mode") != args.end()) {
         ui = new SimpleUI(std::move(core));
@@ -54,8 +55,7 @@ int main(int argc, char ** argv) {
         ui = new CLI(std::move(core));
     }
 
-    ui->quiet   = args.find("quiet")   != args.end();
-    ui->verbose = args.find("verbose") != args.end() && !ui->quiet;
+    ui->quiet = args.find("quiet") != args.end();
 
     ui->run();
     return 0;

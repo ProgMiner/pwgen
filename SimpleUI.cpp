@@ -39,8 +39,6 @@ void SimpleUI::run() {
                      "Send an End-Of-File symbol for quit.\n";
     }
 
-    // core.setPasswordAlphabet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
-
     while (true) {
         if (!quiet) {
             std::cout << "Password ID: ";

@@ -49,6 +49,8 @@ public:
 
     void setPasswordLength(Utils::SafeString::size_type length);
 
+    void setPasswordAlphabet(std::string alphabet);
+
     Utils::SafeString generate(Utils::SafeString && id);
 
     inline const Context & getContext() const {

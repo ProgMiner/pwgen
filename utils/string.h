@@ -28,7 +28,7 @@ namespace Utils {
 
     std::string stringGenerator(
             const std::string & source,
-            const std::string & availableChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMOPQRSTUVWXYZ0123456789"
+            const std::string & availableChars
     );
 
     std::string formatBinaryString(
