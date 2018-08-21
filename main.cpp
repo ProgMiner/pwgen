@@ -54,6 +54,9 @@ int main(int argc, char ** argv) {
         ui = new CLI(std::move(core));
     }
 
+    ui->quiet   = args.find("quiet")   != args.end();
+    ui->verbose = args.find("verbose") != args.end() && !ui->quiet;
+
     ui->run();
     return 0;
 }

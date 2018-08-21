@@ -39,4 +39,9 @@ public:
 
 protected:
     Core core;
+
+    bool verbose = false;
+    bool quiet = false;
+
+    friend int main(int argc, char ** argv);
 };

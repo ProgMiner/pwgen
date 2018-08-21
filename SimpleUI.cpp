@@ -27,26 +27,39 @@ SOFTWARE. */
 #include "utils/getline.h"
 
 void SimpleUI::run() {
-    std::cout << "Master passphrase: ";
-    core.setMasterKey(Utils::getPassword());
+    if (!quiet) {
+        std::cout << "Master passphrase: ";
+    }
 
-    std::cout << "\n"
-                 "Now you can generate some passwords.\n"
-                 "Send an End-Of-File symbol for quit.";
+    core.setMasterKey(Utils::getPassword(quiet? 0: '*'));
+
+    if (!quiet) {
+        std::cout << "\n"
+                     "Now you can generate some passwords.\n"
+                     "Send an End-Of-File symbol for quit.\n";
+    }
 
     // core.setPasswordAlphabet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
 
     while (true) {
-        std::cout << "\nPassword ID: ";
+        if (!quiet) {
+            std::cout << "Password ID: ";
+        }
 
         auto password = core.generate(Utils::getLine());
         if (std::cin.eof()) {
             break;
         }
 
-        std::cout << "Password: " << password;
+        if (!quiet) {
+            std::cout << "Password: ";
+        }
+
+        std::cout << password << '\n';
     }
 
-    std::cout << "\n"
-                 "Bye!\n";
+    if (!quiet) {
+        std::cout << "\n"
+                     "Bye!\n";
+    }
 }
