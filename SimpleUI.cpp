@@ -31,7 +31,7 @@ void SimpleUI::run() {
         std::cout << "Master passphrase: ";
     }
 
-    core.setMasterKey(Utils::getPassword(quiet? 0: '*'));
+    core.setMasterKey(Utils::getPassword(quiet? '\0': '*'));
 
     if (!quiet) {
         std::cout << "\n"
@@ -44,7 +44,7 @@ void SimpleUI::run() {
             std::cout << "Password ID: ";
         }
 
-        auto password = core.generate(Utils::getLine());
+        auto passwordId = Utils::getLine();
         if (std::cin.eof()) {
             break;
         }
@@ -53,7 +53,7 @@ void SimpleUI::run() {
             std::cout << "Password: ";
         }
 
-        std::cout << password << '\n';
+        std::cout << core.generate(std::move(passwordId)) << '\n';
     }
 
     if (!quiet) {

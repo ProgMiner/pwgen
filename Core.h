@@ -24,36 +24,34 @@ SOFTWARE. */
 
 #include "Context.h"
 
-#include "utils/SafeString.h"
-
 class Core {
 
 public:
-    Core() {}
+    Core() noexcept {}
 
-    Core(Context && ctx):
-        context(std::move(ctx))
+    explicit Core(const Context & ctx) noexcept:
+        context(ctx)
     {}
 
-    Core(const Core & core):
+    Core(const Core & core) noexcept:
         context(core.context)
     {}
 
-    Core(Core && core):
-        context(std::move(core.context))
-    {}
+    Core(Core && core) noexcept {
+        std::swap(core.context, context);
+    }
 
-    Utils::SafeString makeMasterKeyHash(Utils::SafeString && key);
-    void setMasterKeyHash(Utils::SafeString && hash);
-    void setMasterKey(Utils::SafeString && key);
+    std::string makeMasterKeyHash(const std::string & key);
+    void setMasterKeyHash(const std::string & hash) noexcept;
+    void setMasterKey(const std::string & key);
 
-    void setPasswordLength(Utils::SafeString::size_type length);
+    void setPasswordLength(std::string::size_type length) noexcept;
 
-    void setPasswordAlphabet(std::string alphabet);
+    void setPasswordAlphabet(const std::string & alphabet) noexcept;
 
-    Utils::SafeString generate(Utils::SafeString && id);
+    std::string generate(std::string && id);
 
-    inline const Context & getContext() const {
+    inline const Context & getContext() const noexcept {
         return context;
     }
 protected:

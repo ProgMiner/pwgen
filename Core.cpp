@@ -28,30 +28,30 @@ SOFTWARE. */
 #include "utils/shred.h"
 #include "utils/xor.h"
 
-Utils::SafeString Core::makeMasterKeyHash(Utils::SafeString && key) {
+std::string Core::makeMasterKeyHash(const std::string & key) {
     return Utils::doubleDigest(key);
 }
 
-void Core::setMasterKeyHash(Utils::SafeString && hash) {
-    context.masterKeyHash = std::move(hash);
+void Core::setMasterKeyHash(const std::string & hash) noexcept {
+    context.masterKeyHash = hash;
 }
 
-void Core::setMasterKey(Utils::SafeString && hash) {
-    context.masterKeyHash = makeMasterKeyHash(std::move(hash));
+void Core::setMasterKey(const std::string & key) {
+    context.masterKeyHash = makeMasterKeyHash(key);
 }
 
-Utils::SafeString Core::generate(Utils::SafeString && id) {
-    id = Utils::doubleDigest(std::move(id)) + context.masterKeyHash;
-    id = Utils::doubleDigest(std::move(id));
+std::string Core::generate(std::string && id) {
+    id = Utils::doubleDigest(id) + context.masterKeyHash;
+    id = Utils::doubleDigest(id);
 
-    id = Utils::xorShorten(std::move(id), context.passwordLength);
+    id = Utils::xorShorten(id, context.passwordLength);
     return Utils::stringGenerator(id, context.passwordAlphabet);
 }
 
-void Core::setPasswordLength(Utils::SafeString::size_type length) {
+void Core::setPasswordLength(std::string::size_type length) noexcept {
     context.passwordLength = length;
 }
 
-void Core::setPasswordAlphabet(std::string alphabet) {
+void Core::setPasswordAlphabet(const std::string & alphabet) noexcept {
     context.passwordAlphabet = alphabet;
 }

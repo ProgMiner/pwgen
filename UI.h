@@ -29,10 +29,10 @@ SOFTWARE. */
 class UI {
 
 public:
-    UI() {}
+    UI() noexcept {}
 
-    UI(Core && core):
-        core(std::move(core))
+    explicit UI(const Core & core) noexcept:
+        core(core)
     {}
 
     virtual void run() = 0;
@@ -40,7 +40,6 @@ public:
 protected:
     Core core;
 
-    bool verbose = false;
     bool quiet = false;
 
     friend int main(int argc, char ** argv);

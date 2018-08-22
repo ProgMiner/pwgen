@@ -27,10 +27,10 @@ SOFTWARE. */
 class SimpleUI: public UI {
 
 public:
-    SimpleUI(): UI() {}
+    SimpleUI() noexcept: UI() {}
 
-    SimpleUI(Core && core):
-        UI(std::move(core))
+    explicit SimpleUI(const Core & core) noexcept:
+        UI(core)
     {}
 
     void run() override;

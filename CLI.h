@@ -27,10 +27,10 @@ SOFTWARE. */
 class CLI: public UI {
 
 public:
-    CLI(): UI() {}
+    CLI() noexcept: UI() {}
 
-    CLI(Core && core):
-        UI(std::move(core))
+    explicit CLI(const Core & core) noexcept:
+        UI(core)
     {}
 
     void run() override;

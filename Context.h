@@ -25,31 +25,45 @@ SOFTWARE. */
 #include <string>
 #include <list>
 
-#include "utils/SafeString.h"
-
 #include "Core.h"
 
 class Context {
 
 public:
-    Context() {}
+    Context() noexcept {}
 
-    Context(const Context & context):
-        masterKeyHash(context.masterKeyHash),
-        passwordLength(context.passwordLength),
+    Context(const Context & context) noexcept:
+        masterKeyHash   (context.masterKeyHash),
+        passwordLength  (context.passwordLength),
         passwordAlphabet(context.passwordAlphabet)
     {}
 
-    Context(Context && context):
-        masterKeyHash(std::move(context.masterKeyHash)),
-        passwordLength(std::move(context.passwordLength)),
-        passwordAlphabet(std::move(context.passwordAlphabet))
-    {}
+    Context(Context && context) noexcept {
+        std::swap(context.masterKeyHash,    masterKeyHash);
+        std::swap(context.passwordLength,   passwordLength);
+        std::swap(context.passwordAlphabet, passwordAlphabet);
+    }
+
+    Context & operator=(const Context & context) {
+        masterKeyHash    = context.masterKeyHash;
+        passwordLength   = context.passwordLength;
+        passwordAlphabet = context.passwordAlphabet;
+
+        return * this;
+    }
+
+    Context & operator=(Context && context) {
+        std::swap(context.masterKeyHash,    masterKeyHash);
+        std::swap(context.passwordLength,   passwordLength);
+        std::swap(context.passwordAlphabet, passwordAlphabet);
+
+        return * this;
+    }
 
 protected:
-    Utils::SafeString masterKeyHash;
+    std::string masterKeyHash;
 
-    Utils::SafeString::size_type passwordLength = 12;
+    std::string::size_type passwordLength = 12;
 
     std::string passwordAlphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 

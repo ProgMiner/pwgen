@@ -27,7 +27,7 @@ SOFTWARE. */
 #include "CLI.h"
 #include "UI.h"
 
-void printHelp(std::string && path, const Arguments & args) {
+void printHelp(const std::string & path, const Arguments & args) {
     std::cout << "Using:\n" <<
                  "  " << path << " [<options>]\n\n";
 
@@ -46,7 +46,7 @@ int main(int argc, char ** argv) {
     UI * ui = nullptr;
 
     Core core;
-    core.setPasswordLength(args["length"].as <Utils::SafeString::size_type> ());
+    core.setPasswordLength(args["length"].as <std::string::size_type> ());
     core.setPasswordAlphabet(args["alphabet"].as <std::string> ());
 
     if (args.find("simple-mode") != args.end()) {

@@ -28,13 +28,16 @@ SOFTWARE. */
 class Exception {
 
 public:
-    Exception(std::string && msg):
-        msg(std::move(msg))
+    Exception(const std::string & msg) noexcept:
+        msg(msg)
     {}
 
-    Exception(std::string && msg, Exception && previous):
-        msg(std::move(msg)),
-        previous(new Exception(std::move(previous)))
+    Exception(
+            const std::string & msg,
+            const Exception & previous
+    ):
+        msg(msg),
+        previous(new Exception(previous))
     {}
 
     Exception(const std::exception & ex):
@@ -42,13 +45,17 @@ public:
     {}
 
     Exception(const Exception & ex):
-        msg(ex.msg),
-        previous(ex.previous)
-    {}
-    Exception(Exception && ex):
-        msg(std::move(ex.msg)),
-        previous(std::move(ex.previous))
-    {}
+        msg(ex.msg)
+    {
+        if (ex.previous != nullptr) {
+            previous = new Exception(* ex.previous);
+        }
+    }
+
+    Exception(Exception && ex) noexcept {
+        std::swap(ex.msg,      msg);
+        std::swap(ex.previous, previous);
+    }
 
     virtual ~Exception() {
         delete previous;

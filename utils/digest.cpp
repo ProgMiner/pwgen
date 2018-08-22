@@ -30,7 +30,7 @@ bool Utils::digestLowlevel(
         size_t msgLen,
         unsigned char * dst,
         unsigned int * dstLen
-) {
+) noexcept {
     if (digestType == nullptr) {
         return false;
     }

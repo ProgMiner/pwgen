@@ -33,7 +33,7 @@ namespace Utils {
             size_t msgLen,
             unsigned char * dst,
             unsigned int * dstLen
-    );
+    ) noexcept;
 
     std::string digest(
             const std::string & digestName,

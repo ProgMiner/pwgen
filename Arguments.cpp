@@ -22,8 +22,6 @@ SOFTWARE. */
 
 #include "Arguments.h"
 
-#include <utils/SafeString.h>
-
 Arguments::Arguments():
     optionsDescription("Options"),
     argumentsDescription()
@@ -36,7 +34,7 @@ Arguments::Arguments():
 
         (
             "length,l",
-            program_options::value <Utils::SafeString::size_type> ()->
+            program_options::value <std::string::size_type> ()->
                 default_value(12),
             "Set password length"
         )

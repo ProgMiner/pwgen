@@ -43,7 +43,6 @@ HEADERS = main.h \
 		  utils/xor.h \
 		  utils/shred.h \
 		  utils/string.h \
-		  utils/SafeString.h \
 		  SimpleUI.h \
 		  Context.h \
 		  CLI.h \
