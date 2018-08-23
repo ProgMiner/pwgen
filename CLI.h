@@ -22,6 +22,9 @@ SOFTWARE. */
 
 #pragma once
 
+#include <string>
+#include <list>
+
 #include "UI.h"
 
 class CLI: public UI {
@@ -34,4 +37,20 @@ public:
     {}
 
     void run() override;
+
+protected:
+    enum MenuItems {
+        SET_MASTER_KEY,
+
+        GENERATE,
+        SET_PASSWORD_LENGTH,
+        SET_PASSWORD_ALPHABET,
+
+        REMIND,
+        MAKE_REMINDER,
+
+        QUIT
+    };
+
+    static const std::list <std::string> MENU_ITEMS;
 };

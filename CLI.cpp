@@ -24,6 +24,40 @@ SOFTWARE. */
 
 #include <iostream>
 
+#include "utils/menu.h"
+
+const std::list <std::string> CLI::MENU_ITEMS {
+    "# Password generation",
+    "  Set &master passphrase", // SET_MASTER_KEY
+    "",
+    "  &Generate password",     // GENERATE
+    "  Set password &length",   // SET_PASSWORD_LENGTH
+    "  Set password &alphabet", // SET_PASSWORD_ALPHABET
+    "",
+    "# Passphrase reminding",
+    "  &Remind passphrase",     // REMIND
+    "  Make reminder file",     // MAKE_REMINDER
+    "",
+    "&Quit"                     // QUIT
+};
+
 void CLI::run() {
-    // TODO Menu with actions
+    while (true) {
+        MenuItems action = static_cast <MenuItems> (Utils::menu(MENU_ITEMS));
+
+        switch (action) {
+        case SET_MASTER_KEY:
+
+        case GENERATE:
+        case SET_PASSWORD_LENGTH:
+        case SET_PASSWORD_ALPHABET:
+
+        case REMIND:
+        case MAKE_REMINDER:
+
+        case QUIT:
+            std::cout << "Bye!\n";
+            return;
+        }
+    }
 }

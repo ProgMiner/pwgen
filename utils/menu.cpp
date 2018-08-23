@@ -24,6 +24,7 @@ SOFTWARE. */
 
 #include <exception>
 #include <iostream>
+#include <locale>
 #include <map>
 
 int Utils::menu(
@@ -40,6 +41,17 @@ int Utils::menu(
         bool andSym = false;
         std::string result;
 
+        if (item.find("# ") == 0) {
+            result = std::string(item, 2);
+#ifdef _WIN32
+            std::cout << " _" << result << '_';
+#else
+            std::cout << " \e[1;4m " << result << " \e[0m";
+#endif
+            std::cout << '\n';
+            continue;
+        }
+
         for (char c: item) {
             if (c == '&') {
                 if (andSym) {
@@ -52,14 +64,23 @@ int Utils::menu(
 
             if (andSym) {
                 chars.insert({c, j});
+
+                char cLower = std::tolower(c);
+                if (chars.find(cLower) == chars.end()) {
+                    chars.insert({cLower, j});
+                }
 #ifdef _WIN32
                 result += '_';
+                result += c;
 #else
                 result += "\e[4m";
+                result += c;
+                result += "\e[24m";
 #endif
+                andSym = false;
+            } else {
+                result += c;
             }
-
-            result += c;
         }
 
         if (!item.empty()) {
@@ -92,7 +113,11 @@ int Utils::menu(
                 ret = std::stoi(in);
             } catch (std::exception e) {}
         }
-    } while (ret <= 0 || ret > items.size());
+
+        if (items.empty()) {
+            return ret - 1;
+        }
+    } while (ret <= 0 || ret >= j);
 
     return ret - 1;
 }
