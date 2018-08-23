@@ -54,6 +54,8 @@ std::string Utils::getLine(
         std::istream * cin
 ) {
     std::string ret;
+    cin->clear();
+    cin->sync();
 
     char c;
     do {
@@ -97,9 +99,7 @@ std::string Utils::getPassword(
     } while (separators.find(c) == std::string::npos);
     ret.pop_back();
 
-    if (c == (char) 4) {
-        eof = true;
-    }
+    eof = c == (char) 4;
 
     return ret;
 }

@@ -98,9 +98,18 @@ int Utils::menu(
     do {
         std::cout << postPrompt;
 
+        ret = 0;
         std::string in = getLine();
 
-        ret = 0;
+        if (std::cin.eof()) {
+            std::cout << '\n';
+            continue;
+        }
+
+        if (in.empty()) {
+            continue;
+        }
+
         if (in.size() == 1) {
             auto it = chars.find(in[0]);
 

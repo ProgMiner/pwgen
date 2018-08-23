@@ -67,7 +67,8 @@ void CLI::run() {
                 }
 
                 core.setMasterKey(password);
-                std::cout << "Done.";
+                std::cout << "\n"
+                             "Done.";
             }
             break;
 
@@ -77,7 +78,7 @@ void CLI::run() {
 
                 auto passwordId = Utils::getLine();
                 if (std::cin.eof()) {
-                    std::cout << "Abort!";
+                    std::cout << "\nAbort!";
                     break;
                 }
 
@@ -96,5 +97,9 @@ void CLI::run() {
             std::cout << "Bye!\n";
             return;
         }
+
+        std::cout << "\n"
+                     "Press Enter to continue...\n";
+        Utils::getLine();
     }
 }
