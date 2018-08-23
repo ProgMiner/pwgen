@@ -44,7 +44,7 @@ public:
         std::swap(context.passwordAlphabet, passwordAlphabet);
     }
 
-    Context & operator=(const Context & context) {
+    Context & operator=(const Context & context) noexcept {
         masterKeyHash    = context.masterKeyHash;
         passwordLength   = context.passwordLength;
         passwordAlphabet = context.passwordAlphabet;
@@ -52,12 +52,24 @@ public:
         return * this;
     }
 
-    Context & operator=(Context && context) {
+    Context & operator=(Context && context) noexcept {
         std::swap(context.masterKeyHash,    masterKeyHash);
         std::swap(context.passwordLength,   passwordLength);
         std::swap(context.passwordAlphabet, passwordAlphabet);
 
         return * this;
+    }
+
+    inline bool isMasterKeyHashSet() const noexcept {
+        return !masterKeyHash.empty();
+    }
+
+    inline std::string::size_type getPasswordLength() const noexcept {
+        return passwordLength;
+    }
+
+    inline const std::string & getPasswordAlphabet() const noexcept {
+        return passwordAlphabet;
     }
 
 protected:

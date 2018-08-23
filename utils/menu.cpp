@@ -27,6 +27,8 @@ SOFTWARE. */
 #include <locale>
 #include <map>
 
+#include "utils/getline.h"
+
 int Utils::menu(
         const std::list <std::string> & items,
         const std::string & prePrompt,
@@ -96,8 +98,7 @@ int Utils::menu(
     do {
         std::cout << postPrompt;
 
-        std::string in;
-        std::cin >> in;
+        std::string in = getLine();
 
         ret = 0;
         if (in.size() == 1) {

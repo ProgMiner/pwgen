@@ -67,6 +67,7 @@ std::string Utils::getLine(
 }
 
 std::string Utils::getPassword(
+        bool & eof,
         char replacementChar,
         std::string && separators
 ) {
@@ -94,8 +95,20 @@ std::string Utils::getPassword(
             }
         }
     } while (separators.find(c) == std::string::npos);
-
     ret.pop_back();
 
+    if (c == (char) 4) {
+        eof = true;
+    }
+
     return ret;
+}
+
+std::string Utils::getPassword(
+        char replacementChar,
+        std::string && separators
+) {
+    static bool eof;
+
+    return getPassword(eof, replacementChar, std::forward <std::string> (separators));
 }

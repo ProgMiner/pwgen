@@ -24,6 +24,7 @@ SOFTWARE. */
 
 #include <iostream>
 
+#include "utils/getline.h"
 #include "utils/menu.h"
 
 const std::list <std::string> CLI::MENU_ITEMS {
@@ -43,12 +44,48 @@ const std::list <std::string> CLI::MENU_ITEMS {
 
 void CLI::run() {
     while (true) {
-        MenuItems action = static_cast <MenuItems> (Utils::menu(MENU_ITEMS));
+        std::cout << "Master passphrase: " << (core.getContext().isMasterKeyHashSet()? "set": "not set") << '\n';
+        std::cout << "Password length:   " << core.getContext().getPasswordLength() << '\n';
+        std::cout << "Password alphabet: " << core.getContext().getPasswordAlphabet() << '\n';
+        std::cout << '\n';
+
+        MenuItems action = static_cast <MenuItems> (
+            Utils::menu(MENU_ITEMS)
+        );
 
         switch (action) {
         case SET_MASTER_KEY:
+            {
+                std::cout << "Master passphrase: ";
+
+                bool eof;
+                auto password = Utils::getPassword(eof);
+                if (eof) {
+                    std::cout << "\n"
+                                 "Abort!";
+                    break;
+                }
+
+                core.setMasterKey(password);
+                std::cout << "Done.";
+            }
+            break;
 
         case GENERATE:
+            {
+                std::cout << "Password ID: ";
+
+                auto passwordId = Utils::getLine();
+                if (std::cin.eof()) {
+                    std::cout << "Abort!";
+                    break;
+                }
+
+                std::cout << "Password: " << core.generate(std::move(passwordId));
+                std::cout << "\n";
+            }
+            break;
+
         case SET_PASSWORD_LENGTH:
         case SET_PASSWORD_ALPHABET:
 

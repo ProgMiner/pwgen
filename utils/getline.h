@@ -32,6 +32,12 @@ namespace Utils {
     );
 
     std::string getPassword(
+            bool & eof,
+            char replacementChar = '*',
+            std::string && separators = "\n\r"
+    );
+
+    std::string getPassword(
             char replacementChar = '*',
             std::string && separators = "\n\r"
     );
