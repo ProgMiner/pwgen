@@ -22,8 +22,6 @@ SOFTWARE. */
 
 #include "CLI.h"
 
-#include <iostream>
-
 #include "utils/getline.h"
 #include "utils/menu.h"
 
@@ -55,40 +53,72 @@ void CLI::run() {
 
         switch (action) {
         case SET_MASTER_KEY:
-            {
-                std::cout << "Master passphrase: ";
+            try {
+                std::cout << "Master passphrase (" << (core.getContext().isMasterKeyHashSet()? "set": "not set") << "): ";
 
-                bool eof;
-                auto password = Utils::getPassword(eof);
-                if (eof) {
-                    std::cout << "\n"
-                                 "Abort!";
-                    break;
-                }
-
-                core.setMasterKey(password);
+                core.setMasterKey(input(ReadFactory().password()));
                 std::cout << "\n"
                              "Done.";
+            } catch (bool e) {
+                std::cout << "\n"
+                             "Abort!";
             }
             break;
 
         case GENERATE:
-            {
+            try {
                 std::cout << "Password ID: ";
 
-                auto passwordId = Utils::getLine();
-                if (std::cin.eof()) {
-                    std::cout << "\nAbort!";
-                    break;
-                }
-
-                std::cout << "Password: " << core.generate(std::move(passwordId));
-                std::cout << "\n";
+                auto passwordId = input(ReadFactory().line());
+                std::cout << "Password: " << core.generate(std::move(passwordId)) << '\n';
+            } catch (bool e) {
+                std::cout << "\n"
+                             "Abort!";
             }
             break;
 
         case SET_PASSWORD_LENGTH:
+            try {
+                auto prompt = "Password length (" + std::to_string(core.getContext().getPasswordLength()) + "): ";
+
+                using T = std::string::size_type;
+                core.setPasswordLength(input <T> (ReadFactory(prompt).line(), [=](const std::string & in, bool & retry) {
+                    T ret = 0;
+
+                    try {
+                        long n = std::stol(in);
+
+                        if (n <= 0) {
+                            std::cout << "Password length cannot be lower or equal zero\n";
+                            retry = true;
+                        } else {
+                            ret = n;
+                            retry = false;
+                        }
+                    } catch (std::exception e) {
+                        retry = true;
+                    }
+
+                    return ret;
+                }));
+                std::cout << "Done.";
+            } catch (bool e) {
+                std::cout << "\n"
+                             "Abort!";
+            }
+            break;
+
         case SET_PASSWORD_ALPHABET:
+            try {
+                std::cout << "Password alphabet (" << core.getContext().getPasswordAlphabet() << "): ";
+
+                core.setPasswordAlphabet(input(ReadFactory().line()));
+                std::cout << "Done.";
+            } catch (bool e) {
+                std::cout << "\n"
+                             "Abort!";
+            }
+            break;
 
         case REMIND:
         case MAKE_REMINDER:
@@ -102,4 +132,39 @@ void CLI::run() {
                      "Press Enter to continue...\n";
         Utils::getLine();
     }
+}
+
+std::string CLI::input(const CLI::ReadType & read) {
+    bool abort = false;
+    std::string ret = read(abort);
+
+    if (abort) {
+        // TODO
+        throw false;
+    }
+
+    return ret;
+}
+
+CLI::ReadType CLI::ReadFactory::line(std::istream * cin) {
+    return [=] (bool & abort) {
+        std::cout << prompt;
+
+        std::string ret = Utils::getLine(separators, cin);
+
+        abort = cin->eof();
+        return ret;
+    };
+}
+
+CLI::ReadType CLI::ReadFactory::password(char replacementChar) {
+    return [=] (bool & abort) {
+        std::cout << prompt;
+
+        return Utils::getPassword(
+                abort,
+                replacementChar,
+                std::string(separators)
+        );
+    };
 }

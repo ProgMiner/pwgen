@@ -22,6 +22,8 @@ SOFTWARE. */
 
 #pragma once
 
+#include <functional>
+#include <iostream>
 #include <string>
 #include <list>
 
@@ -52,5 +54,52 @@ protected:
         QUIT
     };
 
+    using ReadType = std::function <std::string(bool &)>;
+
+    template <typename T>
+    using ValidateType = std::function <T(const std::string &, bool &)>;
+
+    class ReadFactory {
+
+    public:
+        ReadFactory(
+                const std::string & prompt = "",
+                const std::string & separators = "\n\r"
+        ): prompt(prompt), separators(separators) {}
+
+        ReadType line(std::istream * cin = & std::cin);
+
+        ReadType password(char replacementChar = '*');
+
+    protected:
+        std::string prompt;
+        std::string separators;
+    };
+
     static const std::list <std::string> MENU_ITEMS;
+
+    std::string input(const ReadType & read);
+
+    template <typename T>
+    T input(
+            const ReadType & read,
+            const ValidateType <T> & validate
+    ) {
+        T ret;
+
+        bool retry = false;
+        do {
+            bool abort = false;
+            std::string in = read(abort);
+
+            if (abort) {
+                // TODO
+                throw false;
+            }
+
+            ret = validate(in, retry);
+        } while (retry);
+
+        return ret;
+    }
 };

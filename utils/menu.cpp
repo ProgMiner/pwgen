@@ -99,7 +99,7 @@ int Utils::menu(
         std::cout << postPrompt;
 
         ret = 0;
-        std::string in = getLine();
+        std::string in = Utils::getLine();
 
         if (std::cin.eof()) {
             std::cout << '\n';
