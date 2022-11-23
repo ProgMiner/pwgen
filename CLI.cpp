@@ -95,7 +95,7 @@ void CLI::run() {
                             ret = n;
                             retry = false;
                         }
-                    } catch (std::exception e) {
+                    } catch (const std::exception & e) {
                         retry = true;
                     }
 

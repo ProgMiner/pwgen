@@ -121,7 +121,7 @@ int Utils::menu(
         if (ret == 0) {
             try {
                 ret = std::stoi(in);
-            } catch (std::exception e) {}
+            } catch (const std::exception & e) {}
         }
 
         if (items.empty()) {
